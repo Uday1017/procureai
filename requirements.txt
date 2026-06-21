@@ -1,0 +1,25 @@
+# Gemini - the only LLM SDK we need (handles OCR, RAG, chat, embeddings, web search)
+google-generativeai>=0.8.0
+
+# Vector database - stores embedded document chunks locally (no cloud needed)
+chromadb>=0.5.0
+
+# PDF reading - extracts pages from PDFs before sending to Gemini Vision
+pymupdf>=1.24.0
+
+# Web framework for the UI
+streamlit>=1.35.0
+
+# Audio - recording voice input from microphone
+sounddevice>=0.4.6
+scipy>=1.13.0
+numpy>=1.26.0
+
+# Text to speech - Gemini handles STT, gTTS speaks the answer back
+gTTS>=2.5.0
+
+# Environment variables - keeps your API key out of code
+python-dotenv>=1.0.0
+
+# File handling utilities
+pathlib2>=2.3.7
