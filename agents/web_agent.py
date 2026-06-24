@@ -18,7 +18,6 @@ Why Gemini Grounding instead of a separate search API?
 
 from google import genai
 from google.genai import types
-from utils.helpers import get_next_key
 from typing import Dict
 
 
@@ -32,7 +31,7 @@ class WebSearchAgent:
         Args:
             api_key: Gemini API key
         """
-        self.client = genai.Client(api_key=get_next_key())
+        self.client = genai.Client(api_key=api_key)
         self.model_name = "gemini-2.5-flash"
         self.tools = [types.Tool(google_search=types.GoogleSearch())]
     

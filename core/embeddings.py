@@ -1,8 +1,25 @@
 from google import genai
-from utils.helpers import get_next_key
 from typing import List, Dict
 import re
 import time
+import os
+from dotenv import load_dotenv
+import itertools
+
+_key_cycle = None
+
+def _get_key():
+    global _key_cycle
+    if _key_cycle is None:
+        load_dotenv()
+        keys = [os.getenv(f"GEMINI_API_KEY_{i}") for i in range(1, 5)]
+        keys = [k for k in keys if k]
+        if not keys:
+            k = os.getenv("GEMINI_API_KEY")
+            if k:
+                keys = [k]
+        _key_cycle = itertools.cycle(keys)
+    return next(_key_cycle)
 
 
 def chunk_text(text: str, chunk_size: int = 600, overlap: int = 50) -> List[Dict]:

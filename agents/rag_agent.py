@@ -22,7 +22,6 @@ What is RAG?
 from google import genai
 from core.embeddings import embed_query
 from core.vectorstore import DocumentVectorStore
-from utils.helpers import get_next_key
 from typing import Dict
 
 
@@ -59,7 +58,7 @@ class RAGAgent:
         
         # Step 1: Embed the question
         print(f"\n[RAG] Question: {question}")
-        query_vector = embed_query(question, get_next_key())
+        query_vector = embed_query(question, self.api_key)
         
         # Step 2: Search vector store for relevant chunks
         relevant_chunks = self.vectorstore.search(query_vector, top_k=top_k)

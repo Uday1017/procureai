@@ -23,7 +23,6 @@ from google import genai
 from agents.rag_agent import RAGAgent
 from agents.web_agent import WebSearchAgent
 from core.vectorstore import DocumentVectorStore
-from utils.helpers import get_next_key
 from typing import Dict
 
 
@@ -43,7 +42,7 @@ class ProcurementOrchestrator:
         self.rag_agent = RAGAgent(api_key, vectorstore)
         self.web_agent = WebSearchAgent(api_key)
         self.vectorstore = vectorstore
-        self.client = genai.Client(api_key=get_next_key())
+        self.client = genai.Client(api_key=api_key)
     
     def classify_question(self, question: str) -> str:
         """
