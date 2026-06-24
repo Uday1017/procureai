@@ -52,7 +52,7 @@ st.markdown("""
 # Session state
 for key, val in {
     "vectorstore": None, "orchestrator": None, "voice_agent": None,
-    "chat_history": [], "api_key": None, "docs_loaded": []
+    "chat_history": [], "api_key": None, "docs_loaded": [], "voice_question": None
 }.items():
     if key not in st.session_state:
         st.session_state[key] = val
@@ -159,8 +159,26 @@ for msg in st.session_state.chat_history:
         if msg.get("audio_path") and os.path.exists(msg["audio_path"]):
             st.audio(msg["audio_path"], format="audio/mp3")
 
-# ── Chat input ──
-question = st.chat_input("Ask anything about your documents...")
+# ── Voice input ──
+col_voice, col_spacer = st.columns([1, 6])
+with col_voice:
+    voice_btn = st.button("🎤 Speak", use_container_width=True)
+
+if voice_btn:
+    if not st.session_state.voice_agent:
+        st.error("API key not set")
+    else:
+        with st.spinner("🎤 Listening for 5 seconds... speak now!"):
+            try:
+                transcribed = st.session_state.voice_agent.record_and_transcribe(5)
+                st.session_state.voice_question = transcribed
+                st.success(f"✅ Heard: *\"{transcribed}\"*")
+            except Exception as e:
+                st.error(f"Mic error: {e}")
+
+# ── Chat input (text or voice) ──
+voice_q = st.session_state.pop("voice_question", None)
+question = st.chat_input("Ask anything about your documents...") or voice_q
 
 if question:
     st.session_state.chat_history.append({"role": "user", "content": question})
@@ -181,20 +199,11 @@ if question:
                 if sources_text:
                     st.markdown(sources_text)
 
-                # TTS
-                audio_path = None
-                try:
-                    audio_path = st.session_state.voice_agent.text_to_speech(answer[:500])
-                    st.audio(audio_path, format="audio/mp3")
-                except:
-                    pass
-
                 st.session_state.chat_history.append({
                     "role": "assistant",
                     "content": answer,
                     "method": method,
                     "sources_text": sources_text,
-                    "audio_path": audio_path
                 })
             except Exception as e:
                 st.error(f"Error: {e}")
