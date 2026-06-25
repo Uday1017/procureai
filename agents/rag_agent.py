@@ -1,23 +1,4 @@
-"""
-RAG Agent — agents/rag_agent.py
-==================================
-What this does:
-  - Takes a user question
-  - Embeds it into a vector
-  - Searches the vector store for relevant chunks
-  - Feeds those chunks + the question to Gemini
-  - Returns a grounded answer (with source document info)
 
-What is RAG?
-  Retrieval Augmented Generation. Instead of asking the LLM to answer
-  from memory (which leads to hallucinations), we RETRIEVE relevant
-  context from our documents first, then AUGMENT the LLM prompt with
-  that context, then let it GENERATE an answer.
-
-  Memory-only LLM: "What's the delivery date?" → makes something up
-  RAG LLM:         "What's the delivery date?" → finds the clause in
-                    the contract → answers accurately with source
-"""
 
 from google import genai
 from core.embeddings import embed_query
